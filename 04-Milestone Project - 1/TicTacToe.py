@@ -13,7 +13,7 @@ def main():
     #print(player_choice(test_board))
     #print(replay())
     print('Welcome to Tic Tac Toe!')
-    board = ['#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
+    
     while True:
         board = ['#'] + (9 * [' '])
         player1_marker, player2_marker = player_input()
