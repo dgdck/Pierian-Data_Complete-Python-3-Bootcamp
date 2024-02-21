@@ -2,18 +2,8 @@ import random
 
 
 def main():
-    #display_board(test_board)
-    #player_input()
-    #place_marker(test_board, '@', 5)
-    #win_board = ['#', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
-    #print(win_check(win_board, 'X'))
-    #print(go_first())
-    #print(space_check(test_board, 4))
-    #print(full_board_check(test_board))
-    #print(player_choice(test_board))
-    #print(replay())
     print('Welcome to Tic Tac Toe!')
-    
+
     while True:
         board = ['#'] + (9 * [' '])
         player1_marker, player2_marker = player_input()
@@ -21,7 +11,7 @@ def main():
         print(f'{turn} will go first.')
 
         play_game = input('Are you ready to play? Enter Yes or No. ')
-    
+
         if play_game.lower()[0] == 'y':
             game_on = True
         else:
@@ -64,7 +54,7 @@ def main():
                         game_on = False
                     else:
                         turn = 'Player 1'
-        
+
         game_on = replay()
         if not game_on:
             break
