@@ -1,0 +1,6 @@
+[flake8]
+max-line-length = 120
+# E262 - inline comment should start with '#'
+# W504 - line break after binary operator
+ignore = E262, W504
+
