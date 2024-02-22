@@ -36,7 +36,7 @@ class Deck:
 
     def deal_one(self):
         # pop card from deck
-        return self.all_cards.pop()
+        return self.all_cards.pop(0)
 
 
 class Player:
