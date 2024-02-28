@@ -44,6 +44,8 @@ class Player:
     def __init__(self, name):
         self.name = name.capitalize()
         self.all_cards = []
+        self.placed_bet = 0
+        self.total_value = 0
         if name.lower() != 'dealer':
             self.balance = 100
 
@@ -57,9 +59,32 @@ class Player:
         else:
             # For a sinle Card object
             self.all_cards.append(new_cards)
+    
+    def bet(self, amount=5):
+        self.balance -= amount
+        self.placed_bet = amount
+        return f"You have placed a bet of {self.placed_bet}. You have {self.balance} of chips left."
+    
+    def calculate_cards(self):
+        total_value = 0
+        ace_card = False
+        for card in self.all_cards:
+            if card.rank == 'Ace':
+                ace_card = True
+            total_value += card.value
+        if total_value > 21 and ace_card is True:
+            total_value -= 10
+        return total_value
 
     def __str__(self) -> str:
         return self.name
+
+
+'''
+newplayer = Player('Test')
+print(newplayer.bet())
+print(newplayer.balance)
+'''
 
 
 if __name__ == '__main__':
@@ -97,5 +122,85 @@ if __name__ == '__main__':
 
     game_on = True
     while game_on:
+        # Reset cards in hands
+        dealer.all_cards = []
+        player.all_cards = []
 
-        pass
+        print("\n" * 2)
+
+        place_bet = True
+        while place_bet:
+            try:
+                x = int(input("Place your bet. Minimum is 5. "))
+                
+            except ValueError:
+                print("Please enter a number")
+            
+            else:
+                if x < 5:
+                    print("The minimum bet is 5 chips.")
+                else:
+                    print(player.bet(x))
+                    place_bet = False
+
+        dealer.add_cards(play_deck.deal_one())
+        player.add_cards(play_deck.deal_one())
+        dealer.add_cards(play_deck.deal_one())
+        player.add_cards(play_deck.deal_one())
+
+        print(f"You have a {player.all_cards[0]} and {player.all_cards[1]}")
+        print(f"Your total value is: {player.calculate_cards()}\n")
+        print(f"The dealer has {dealer.all_cards[-1]} and a card face down.\n")
+
+        dealer_cardvalue = dealer.calculate_cards()
+        player_cardvalue = player.calculate_cards()
+
+        if player_cardvalue == 21:
+            player.balance += player.placed_bet * 2
+            print("You have BLACKJACK")
+            print(f"Your new balance is: {player.balance} chips.\n")
+
+        action = True
+        while action:
+            action = input("Choose the following: stand, hit, double or surrender ").lower()
+            dealer_cardvalue = dealer.calculate_cards()
+            player_cardvalue = player.calculate_cards()
+
+            if action == 'stand':
+                # Keep your cards and dealer reveals his second card.
+                # Check who won.
+                print(f"The dealer has {dealer.all_cards[-1]} and {dealer.all_cards[0]}.")
+                print(f"The dealer's cardvalue is: {dealer.calculate_cards()}\n")
+
+                if dealer_cardvalue > player_cardvalue:
+                    print("Dealer has won\n")
+                    break
+
+                elif dealer_cardvalue == player_cardvalue:
+                    print("The cards have equal value\n")
+                    break
+
+                elif dealer_cardvalue < player_cardvalue:
+                    player.balance += player.placed_bet * 2
+                    print("You have won this round")
+                    print(f"You now have {player.balance} chips.\n")
+                    break            
+
+            if action == 'hit':
+                # Player gets an additional card
+                # Can be repeated untill bust
+                pass
+            
+            if action == 'double':
+                # Double wager and get 1 additional card
+                # Check who won
+                pass
+
+            if action == 'surrender':
+                # Give up and lose half your bet
+                # Start new round
+                pass
+
+            place_bet = True
+
+       # game_on = False
